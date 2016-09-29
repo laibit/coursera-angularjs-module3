@@ -1,0 +1,9 @@
+<div>
+<ol>
+  <li ng-repeat="item in list.found">
+    {{ item.short_name }} - {{ item.name }}
+    <button class="btn btn-default btn-xs" ng-click="list.removeItem($index);">Remove Item 1</button>
+    <button class="btn btn-default btn-xs" ng-click="list.onRemove({index: $index});">Remove Item 2</button>
+  </li>
+</ol>
+</div>
