@@ -4,6 +4,7 @@
     <th>#</th>
     <th>Short name</th>
     <th>Name</th>
+    <th>Description</th>
     <th>&nbsp;</th>
   </tr>
 </thead>
@@ -12,6 +13,7 @@
     <td>{{ $index+1 }}</td>
     <td>{{ item.short_name }}</td>
     <td>{{ item.name }}</td>
+    <td>{{ item.description }}</td>
     <td>
       <button class="btn btn-default btn-xs pull-right" ng-click="list.onRemove({index: $index});">Don't want this one!</button>
     </td>
@@ -19,6 +21,6 @@
 </tbody>
 </table>
 
-<div class="alert alert-warning" ng-show="list.isEmpty && list.numberOfSearches > 0">
+<div class="alert alert-warning" ng-if="list.isEmpty && list.numberOfSearches > 0">
   <strong>Nothing found!</strong>
 </div>
