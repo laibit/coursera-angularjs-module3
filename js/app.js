@@ -11,12 +11,26 @@ angular.module('NarrowItDownApp', [])
 
 function FoundItemsDirective() {
   var ddo = {
-    templateUrl: 'list.html'
+    templateUrl: 'list.html',
+    scope: {
+      found: '<',
+      isEmpty: '<',
+      numberOfSearches: '<',
+      onRemove: '&'
+    },
+    controller: FoundItemsDirectiveController,
+    controllerAs: 'list',
+    bindToController: true
   };
 
   return ddo;
 }
 
+
+function FoundItemsDirectiveController() {
+  var list = this;
+
+}
 
 
 NarrowItDownController.$inject = ['MenuSearchService'];
@@ -24,13 +38,41 @@ function NarrowItDownController(MenuSearchService) {
   var list = this;
 
   list.found = [];
+  
+  list.isEmpty = true;
+  list.numberOfSearches = 0;
 
-  list.getItems = function () {
-    list.found = MenuSearchService.getMatchedMenuItems("test");
+  list.getItems = function (searchTerm) {
+    list.numberOfSearches++;
+
+    if(searchTerm !== '') {
+
+      list.found = [];
+      var promise = MenuSearchService.getMatchedMenuItems(searchTerm);
+
+      promise.then(function (response) {
+        list.found = response;
+
+        if(list.found.length === 0)
+          list.isEmpty = true;
+        else
+          list.isEmpty = false;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    }
+    else {
+      list.isEmpty = true;
+    }
+
+
   };
 
   list.removeItem = function (itemIndex) {
-    list.found = MenuSearchService.removeItem(itemIndex);
+    //list.found = MenuSearchService.removeItem(itemIndex);
+    list.found.splice(itemIndex, 1);
   };
 
 
@@ -41,17 +83,27 @@ MenuSearchService.$inject = ['$http', 'ApiBasePath']
 function MenuSearchService($http, ApiBasePath) {
   var service = this;
 
-  var found = [{short_name: "I1", name: "Item 1"},{short_name: "I2", name: "Item 2"},{short_name: "I3", name: "Item 3"}];
-
   service.getMatchedMenuItems = function (searchTerm) {
-    return found;
-  }
+    var totalItems = [];
+    var foundItems = [];
 
-  service.removeItem = function (itemIndex) {
-    found.splice(itemIndex, 1);
-    return found;
-  }
+    return $http({
+      method: "GET",
+      url: (ApiBasePath + "/menu_items.json")
+    }).then(function (response) {
+      totalItems = response.data.menu_items;
 
+      for (var i = 0; i < totalItems.length; i++) {
+        var name = totalItems[i].name;
+        if (name.toLowerCase().indexOf(searchTerm) !== -1) {
+          foundItems.push(totalItems[i]);
+        }
+      }
+
+      return foundItems;
+    })
+
+  };
 
 }
 

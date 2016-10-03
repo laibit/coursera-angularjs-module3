@@ -1,6 +1,24 @@
-<ol>
-  <li ng-repeat="item in list.found">
-    {{ item.short_name }} - {{ item.name }}
-    <button class="btn btn-default btn-xs" ng-click="list.removeItem($index);">Remove Item</button>
-  </li>
-</ol>
+<table class="table table-hover" ng-hide="list.isEmpty">
+<thead>
+  <tr>
+    <th>#</th>
+    <th>Short name</th>
+    <th>Name</th>
+    <th>&nbsp;</th>
+  </tr>
+</thead>
+<tbody>
+  <tr ng-repeat="item in list.found">
+    <td>{{ $index+1 }}</td>
+    <td>{{ item.short_name }}</td>
+    <td>{{ item.name }}</td>
+    <td>
+      <button class="btn btn-default btn-xs pull-right" ng-click="list.onRemove({index: $index});">Don't want this one!</button>
+    </td>
+  </tr>
+</tbody>
+</table>
+
+<div class="alert alert-warning" ng-show="list.isEmpty && list.numberOfSearches > 0">
+  <strong>Nothing found!</strong>
+</div>
