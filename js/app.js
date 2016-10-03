@@ -5,7 +5,7 @@ angular.module('NarrowItDownApp', [])
 .controller('NarrowItDownController', NarrowItDownController)
 .service('MenuSearchService', MenuSearchService)
 .directive('foundItems', FoundItemsDirective)
-.constant('ApiBasePath', "http://davids-restaurant.herokuapp.com");
+.constant('ApiBasePath', "https://davids-restaurant.herokuapp.com");
 //.constant('ApiBasePath', "http://localhost:8080/coursera/single-page-apps-angularjs/assignments/coursera-angularjs-module3");
 
 
@@ -38,7 +38,7 @@ function NarrowItDownController(MenuSearchService) {
   var list = this;
 
   list.found = [];
-  
+
   list.isEmpty = true;
   list.numberOfSearches = 0;
 
